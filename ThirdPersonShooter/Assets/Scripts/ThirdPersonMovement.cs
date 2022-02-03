@@ -44,7 +44,9 @@ public class ThirdPersonMovement : MonoBehaviour
         float horizontal = movementValue.x;
         float vertical = movementValue.y;
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
-        Debug.Log(movementValue);
+
+        animator.SetFloat("MoveMagnitude", direction.magnitude);
+
         if (direction.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
