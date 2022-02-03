@@ -67,4 +67,12 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         movementValue = value.Get<Vector2>();
     }
+
+    private void OnJump(InputValue value)
+    {
+        if (isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
 }
