@@ -192,8 +192,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 57505100}
-  m_LocalRotation: {x: 0.38268343, y: 0.00000002015611, z: -0.000000008348933, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.2214375, y: 9.871459e-16, z: 4.92285e-16, w: 0.9751746}
+  m_LocalPosition: {x: 0, y: -2.1512532, z: -0.12602997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1179971098}
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 77147608}
   - component: {fileID: 77147607}
   - component: {fileID: 77147606}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -481,8 +481,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 487596209}
-  m_LocalRotation: {x: 0.28324166, y: -0.000000015112736, z: 0.0000000044633373, w: 0.95904857}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.28324166, y: -0.000000004681587, z: 0.0000000013826414, w: 0.9590486}
+  m_LocalPosition: {x: 0, y: -0.00000047683716, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 679618428}
@@ -501,7 +501,7 @@ GameObject:
   - component: {fileID: 590034011}
   - component: {fileID: 590034010}
   - component: {fileID: 590034009}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -938,7 +938,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689836607}
-  m_LocalRotation: {x: 0.28324163, y: -0.000000015112978, z: 0.0000000044632698, w: 0.95904857}
+  m_LocalRotation: {x: 0.28324166, y: -0.0000000047193303, z: 0.0000000013708644, w: 0.95904857}
   m_LocalPosition: {x: 0, y: 7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1152,7 +1152,7 @@ GameObject:
   - component: {fileID: 907315098}
   - component: {fileID: 907315097}
   - component: {fileID: 907315096}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46631,8 +46631,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1544235724}
-  m_LocalRotation: {x: 0.26579648, y: -0.000000016587144, z: 0.0000000045733097, w: 0.9640292}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.2657965, y: 0.000000016587453, z: -0.0000000045733954, w: 0.9640292}
+  m_LocalPosition: {x: 0, y: -0.00000047683716, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1196500415}
@@ -46840,7 +46840,7 @@ GameObject:
   - component: {fileID: 1825560245}
   - component: {fileID: 1825560244}
   - component: {fileID: 1825560243}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46936,7 +46936,7 @@ GameObject:
   - component: {fileID: 2094432043}
   - component: {fileID: 2094432042}
   - component: {fileID: 2094432041}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
