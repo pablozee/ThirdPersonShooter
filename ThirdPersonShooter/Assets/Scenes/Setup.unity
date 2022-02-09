@@ -50514,6 +50514,7 @@ MonoBehaviour:
   debugTransform: {fileID: 1756036046}
   normalSensitivity: 1
   aimSensitivity: 0.5
+  aimAnimationTransitionSpeed: 10
 --- !u!114 &4416926082805641625
 MonoBehaviour:
   m_ObjectHideFlags: 0

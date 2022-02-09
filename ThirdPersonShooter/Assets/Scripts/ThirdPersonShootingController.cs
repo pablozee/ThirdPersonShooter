@@ -12,14 +12,17 @@ public class ThirdPersonShootingController : MonoBehaviour
     [SerializeField] private GameObject debugTransform;
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
+    [SerializeField] private float aimAnimationTransitionSpeed;
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetInputs;
+    private Animator animator;
 
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
         starterAssetInputs = GetComponent<StarterAssetsInputs>();
+        animator = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
@@ -48,32 +51,39 @@ public class ThirdPersonShootingController : MonoBehaviour
             aimVirtualCamera.Priority = 12;
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * aimAnimationTransitionSpeed));
+
 
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
             Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 10f);
+
+            if (starterAssetInputs.shoot)
+                Shoot();
+            
         } else
         {
             aimVirtualCamera.Priority = 8;
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * aimAnimationTransitionSpeed));
         }
 
-        if (starterAssetInputs.shoot)
+        void Shoot()
         {
-            Debug.Log("Shooting");
-            if (hitTransform != null)
-            {
+           Debug.Log("Shoot");
+           if (hitTransform != null)
+           {
                 Enemy enemy = hitTransform.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    Debug.Log("Hit Enemy");
-                    enemy.TakeDamage(10);
-                }
+                Debug.Log("Hit Enemy");
+                enemy.TakeDamage(10);
+                 }
             }
-            starterAssetInputs.shoot = false;
+                starterAssetInputs.shoot = false;
         }
     }
 
