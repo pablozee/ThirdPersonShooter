@@ -9,6 +9,10 @@ public class ThirdPersonShootingController : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private GameObject debugTransform;
+    [SerializeField] private float inputThreshold, topClamp, bottomClamp;
+    [SerializeField] private bool lockCameraPosition;
+    [SerializeField] private GameObject cinemachineCameraTarget;
+    [SerializeField] private float cinemachineTargetPitch, cameraAngleOverride, cinemachineTargetYaw;
 
     private PlayerInputActions inputActions;
     private bool aim;
@@ -39,7 +43,7 @@ public class ThirdPersonShootingController : MonoBehaviour
 
         if (aim)
         {
-            aimVirtualCamera.gameObject.SetActive(true);
+            aimVirtualCamera.Priority = 12;
 
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
@@ -48,8 +52,37 @@ public class ThirdPersonShootingController : MonoBehaviour
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 10f);
         } else
         {
-            aimVirtualCamera.gameObject.SetActive(false);
+            aimVirtualCamera.Priority = 8;
         }
+    }
+
+    private void LateUpdate()
+    {
+//        CameraRotation();
+    }
+    private void CameraRotation()
+    {
+        Vector2 mouseLook = inputActions.Player.MouseLook.ReadValue<Vector2>();
+        // if there is an input and camera position is not fixed
+        if (mouseLook.sqrMagnitude >= inputThreshold && !lockCameraPosition)
+        {
+            cinemachineTargetYaw += mouseLook.x * Time.deltaTime;
+            cinemachineTargetPitch += mouseLook.y * Time.deltaTime;
+        }
+
+        // clamp our rotations so our values are limited 360 degrees
+        cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
+        cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, bottomClamp, topClamp);
+
+        // Cinemachine will follow this target
+        cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + cameraAngleOverride, cinemachineTargetYaw, 0.0f);
+    }
+
+    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+    {
+        if (lfAngle < -360f) lfAngle += 360f;
+        if (lfAngle > 360f) lfAngle -= 360f;
+        return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
     void OnAim(InputValue value)
