@@ -12,6 +12,8 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool aim;
+		public bool shoot;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -40,10 +42,20 @@ namespace StarterAssets
 		{
 			JumpInput(value.isPressed);
 		}
+		
+		public void OnShoot(InputValue value)
+		{
+			ShootInput(value.isPressed);
+		}
 
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
+		}
+
+		public void OnAim(InputValue value)
+		{
+			AimInput(value.isPressed);
 		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
@@ -65,9 +77,19 @@ namespace StarterAssets
 			jump = newJumpState;
 		}
 
+		public void ShootInput(bool newShootState)
+		{
+			shoot = newShootState;
+		}
+
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;
+		}
+
+		public void AimInput(bool newAimState)
+		{
+			aim	 = newAimState;
 		}
 
 #if !UNITY_IOS || !UNITY_ANDROID

@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using StarterAssets;
 
 public class ThirdPersonShootingController : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private GameObject debugTransform;
-    [SerializeField] private float inputThreshold, topClamp, bottomClamp;
-    [SerializeField] private bool lockCameraPosition;
-    [SerializeField] private GameObject cinemachineCameraTarget;
-    [SerializeField] private float cinemachineTargetPitch, cameraAngleOverride, cinemachineTargetYaw;
+    [SerializeField] private float normalSensitivity;
+    [SerializeField] private float aimSensitivity;
 
-    private PlayerInputActions inputActions;
-    private bool aim;
+    private ThirdPersonController thirdPersonController;
+    private StarterAssetsInputs starterAssetInputs;
 
     private void Awake()
     {
-        inputActions = new PlayerInputActions();
+        thirdPersonController = GetComponent<ThirdPersonController>();
+        starterAssetInputs = GetComponent<StarterAssetsInputs>();
     }
 
     // Start is called before the first frame update
@@ -35,15 +35,19 @@ public class ThirdPersonShootingController : MonoBehaviour
 
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        Transform hitTransform = null;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
             debugTransform.transform.position = raycastHit.point;
             mouseWorldPosition = raycastHit.point;
+            hitTransform = raycastHit.transform;
         }
 
-        if (aim)
+        if (starterAssetInputs.aim)
         {
             aimVirtualCamera.Priority = 12;
+            thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.SetRotateOnMove(false);
 
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
@@ -53,45 +57,24 @@ public class ThirdPersonShootingController : MonoBehaviour
         } else
         {
             aimVirtualCamera.Priority = 8;
+            thirdPersonController.SetSensitivity(normalSensitivity);
+            thirdPersonController.SetRotateOnMove(true);
         }
-    }
 
-    private void LateUpdate()
-    {
-//        CameraRotation();
-    }
-    private void CameraRotation()
-    {
-        Vector2 mouseLook = inputActions.Player.MouseLook.ReadValue<Vector2>();
-        // if there is an input and camera position is not fixed
-        if (mouseLook.sqrMagnitude >= inputThreshold && !lockCameraPosition)
+        if (starterAssetInputs.shoot)
         {
-            cinemachineTargetYaw += mouseLook.x * Time.deltaTime;
-            cinemachineTargetPitch += mouseLook.y * Time.deltaTime;
+            Debug.Log("Shooting");
+            if (hitTransform != null)
+            {
+                Enemy enemy = hitTransform.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    Debug.Log("Hit Enemy");
+                    enemy.TakeDamage(10);
+                }
+            }
+            starterAssetInputs.shoot = false;
         }
-
-        // clamp our rotations so our values are limited 360 degrees
-        cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
-        cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, bottomClamp, topClamp);
-
-        // Cinemachine will follow this target
-        cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + cameraAngleOverride, cinemachineTargetYaw, 0.0f);
     }
 
-    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
-    {
-        if (lfAngle < -360f) lfAngle += 360f;
-        if (lfAngle > 360f) lfAngle -= 360f;
-        return Mathf.Clamp(lfAngle, lfMin, lfMax);
-    }
-
-    void OnAim(InputValue value)
-    {
-        AimInput(value.isPressed);
-    }
-
-    void AimInput(bool newAimState)
-    {
-        aim = newAimState;
-    }
 }
