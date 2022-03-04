@@ -14,6 +14,7 @@ public class ThirdPersonShootingController : MonoBehaviour
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
     [SerializeField] private float aimAnimationTransitionSpeed;
+    [SerializeField] private AudioSource shootAudioSource;
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetInputs;
@@ -76,6 +77,8 @@ public class ThirdPersonShootingController : MonoBehaviour
         void Shoot()
         {
            Debug.Log("Shoot");
+           shootAudioSource.PlayOneShot(shootAudioSource.clip);
+
            if (hitTransform != null)
            {
                 Enemy enemy = hitTransform.GetComponent<Enemy>();
