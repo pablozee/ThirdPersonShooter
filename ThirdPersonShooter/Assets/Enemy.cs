@@ -195,6 +195,7 @@ public class Enemy : MonoBehaviour
 
             PlayerStats playerStats = player.gameObject.GetComponent<PlayerStats>();
 
+            Debug.Log(playerStats);
             playerStats.TakeDamage(attackDamage);
         }
     }
