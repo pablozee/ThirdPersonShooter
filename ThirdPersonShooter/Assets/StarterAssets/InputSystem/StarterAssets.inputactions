@@ -255,6 +255,17 @@
                 },
                 {
                     "name": "",
+                    "id": "c2435742-0673-467b-ac10-8eee8660e881",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9ba3d4a6-a4ac-4d01-95ea-72ae3dbb6385",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
