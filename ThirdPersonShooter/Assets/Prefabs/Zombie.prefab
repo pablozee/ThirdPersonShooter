@@ -7432,15 +7432,33 @@ MonoBehaviour:
   numberOfAttackAnimations: 7
   numberOfWalkAnimations: 12
   numberOfTakeDamageAnimations: 5
-  zombieWalkClips: []
-  zombieAttackClips: []
-  zombieHurtClips: []
-  zombieDieClips: []
-  zombieAudioSource: {fileID: 0}
-  minVolume: 0
-  maxVolume: 0
-  minPitch: 0
-  maxPitch: 0
+  zombieWalkClips:
+  - {fileID: 8300000, guid: 87ebdf4efb9b0eb4a96638aa3ed3c2b5, type: 3}
+  - {fileID: 8300000, guid: 232edef15c1d3914bb48fe6aa92ee7a5, type: 3}
+  - {fileID: 8300000, guid: af3c59e6429a7f74682e43eda7c1bd40, type: 3}
+  - {fileID: 8300000, guid: 66af4ca0495f9714eb005e1deffa8bc3, type: 3}
+  - {fileID: 8300000, guid: 3f85f714afa065a4f927f00533bed69e, type: 3}
+  - {fileID: 8300000, guid: 4614bd7992edbdd44baaec57c66c2f7e, type: 3}
+  zombieAttackClips:
+  - {fileID: 8300000, guid: 01ddf099575ed6240bb83a3da7cc69b6, type: 3}
+  - {fileID: 8300000, guid: 6022074385619e04d897c6b3caf23fd2, type: 3}
+  - {fileID: 8300000, guid: 811fe916f9ab64249a704fe6b16620be, type: 3}
+  - {fileID: 8300000, guid: 4cc88b9dc3adeb04bbc9b9224ca624eb, type: 3}
+  - {fileID: 8300000, guid: 0ba2117d138e74f4d887b91c73b81678, type: 3}
+  - {fileID: 8300000, guid: e17bceaa656e92b428d2430e84a32b28, type: 3}
+  zombieHurtClips:
+  - {fileID: 8300000, guid: 780285ff80350bc48a772862b5443f5f, type: 3}
+  - {fileID: 8300000, guid: e4ffc107d246ea44d988c92e831a3d63, type: 3}
+  - {fileID: 8300000, guid: 965360f2666af8d45a5ccf390332d946, type: 3}
+  zombieDieClips:
+  - {fileID: 8300000, guid: 869b3520c2e342e4bafefe88b2b438ce, type: 3}
+  - {fileID: 8300000, guid: 880c4b6890ec73641a05bcfb37cc3cc4, type: 3}
+  - {fileID: 8300000, guid: bc9b1943e224bb546a5950b5f2a2a177, type: 3}
+  zombieAudioSource: {fileID: 2153811165203142950}
+  minVolume: 0.8
+  maxVolume: 1
+  minPitch: 0.8
+  maxPitch: 1.1
 --- !u!1 &1957055157889940
 GameObject:
   m_ObjectHideFlags: 0
