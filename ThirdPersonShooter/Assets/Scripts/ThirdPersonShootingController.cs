@@ -8,6 +8,7 @@ using StarterAssets;
 public class ThirdPersonShootingController : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    [SerializeField] private GameObject reticle;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private GameObject debugTransform;
     [SerializeField] private float normalSensitivity;
@@ -52,7 +53,7 @@ public class ThirdPersonShootingController : MonoBehaviour
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * aimAnimationTransitionSpeed));
-
+            reticle.SetActive(true);
 
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
@@ -65,6 +66,7 @@ public class ThirdPersonShootingController : MonoBehaviour
             
         } else
         {
+            reticle.SetActive(false);
             aimVirtualCamera.Priority = 8;
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
