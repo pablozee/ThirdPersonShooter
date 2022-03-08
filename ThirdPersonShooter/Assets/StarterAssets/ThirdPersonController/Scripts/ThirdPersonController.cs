@@ -14,6 +14,8 @@ namespace StarterAssets
 #endif
 	public class ThirdPersonController : MonoBehaviour
 	{
+		public bool isEnteringCar;
+
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
 		public float MoveSpeed = 2.0f;
@@ -329,6 +331,11 @@ namespace StarterAssets
 		public void SetRotateOnMove(bool newRotateOnMove)
         {
 			_rotateOnMove = newRotateOnMove;
+        }
+
+		void OnEnterCar(InputValue value)
+        {
+			isEnteringCar = true;
         }
 	}
 }
