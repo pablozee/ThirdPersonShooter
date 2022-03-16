@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
 using StarterAssets;
+using UnityEngine.Animations.Rigging;
 
 public class ThirdPersonShootingController : MonoBehaviour
 {
@@ -15,10 +16,12 @@ public class ThirdPersonShootingController : MonoBehaviour
     [SerializeField] private float aimSensitivity;
     [SerializeField] private float aimAnimationTransitionSpeed;
     [SerializeField] private AudioSource shootAudioSource;
+    [SerializeField] private Rig rig;
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetInputs;
     private Animator animator;
+
 
     private void Awake()
     {
@@ -50,6 +53,7 @@ public class ThirdPersonShootingController : MonoBehaviour
 
         if (starterAssetInputs.aim)
         {
+            rig.weight = 1;
             aimVirtualCamera.Priority = 12;
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
@@ -67,6 +71,7 @@ public class ThirdPersonShootingController : MonoBehaviour
             
         } else
         {
+            rig.weight = 0;
             reticle.SetActive(false);
             aimVirtualCamera.Priority = 8;
             thirdPersonController.SetSensitivity(normalSensitivity);
