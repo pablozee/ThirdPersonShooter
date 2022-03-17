@@ -31,6 +31,7 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(forwardForce);
         HandleMotor();
         HandleSteering();
         UpdateWheels();
