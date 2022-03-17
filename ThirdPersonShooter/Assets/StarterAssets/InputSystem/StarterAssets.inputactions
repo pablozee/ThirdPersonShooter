@@ -326,7 +326,7 @@
                     "name": "Accelerate",
                     "type": "Value",
                     "id": "701c0818-27a7-419a-abda-a29169469013",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 },
@@ -360,7 +360,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
+                    "name": "Negative",
                     "id": "73e6033c-af77-44d2-bcba-f9624cd4f63d",
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
@@ -371,7 +371,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
+                    "name": "Positive",
                     "id": "f3db62cd-82b3-49f6-8666-487d5fd6697d",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
