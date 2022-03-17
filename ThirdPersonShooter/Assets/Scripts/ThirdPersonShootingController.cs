@@ -21,7 +21,7 @@ public class ThirdPersonShootingController : MonoBehaviour
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetInputs;
     private Animator animator;
-
+    private Transform hitTransform;
 
     private void Awake()
     {
@@ -37,13 +37,13 @@ public class ThirdPersonShootingController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         Vector3 mouseWorldPosition = Vector3.zero;
 
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
-        Transform hitTransform = null;
+        hitTransform = null;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
             debugTransform.transform.position = raycastHit.point;
@@ -64,7 +64,7 @@ public class ThirdPersonShootingController : MonoBehaviour
             worldAimTarget.y = transform.position.y;
             Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
-            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 10f);
+        //    transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 10f);
 
             if (starterAssetInputs.shoot)
                 Shoot();
@@ -78,23 +78,22 @@ public class ThirdPersonShootingController : MonoBehaviour
             thirdPersonController.SetRotateOnMove(true);
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * aimAnimationTransitionSpeed));
         }
-
-        void Shoot()
-        {
-           Debug.Log("Shoot");
-           shootAudioSource.PlayOneShot(shootAudioSource.clip);
-
-           if (hitTransform != null)
-           {
-                Enemy enemy = hitTransform.GetComponent<Enemy>();
-                if (enemy != null)
-                {
-                Debug.Log("Hit Enemy");
-                enemy.TakeDamage(10);
-                 }
-            }
-                starterAssetInputs.shoot = false;
-        }
     }
 
+    void Shoot()
+    {
+        Debug.Log("Shoot");
+        shootAudioSource.PlayOneShot(shootAudioSource.clip);
+
+        if (hitTransform != null)
+        {
+            Enemy enemy = hitTransform.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                Debug.Log("Hit Enemy");
+                enemy.TakeDamage(10);
+            }
+        }
+        starterAssetInputs.shoot = false;
+    }
 }
