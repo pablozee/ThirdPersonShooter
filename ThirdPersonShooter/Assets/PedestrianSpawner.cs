@@ -53,7 +53,7 @@ public class PedestrianSpawner : MonoBehaviour
                 {
                     pedestrian = Instantiate(femalePrefab);
                     int randomMeshIndex = Random.Range(0, femaleMeshes.Count);
-                    Instantiate(maleMeshes[randomMeshIndex], pedestrian.transform);
+                    Instantiate(femaleMeshes[randomMeshIndex], pedestrian.transform);
                 }
                 //       Transform spawnWaypoint = transform.GetChild(Random.Range(0, transform.childCount));
                 //       pedestrian.GetComponent<PedestrianWaypointNavigator>().currentWaypoint = spawnWaypoint.GetComponent<Waypoint>();
