@@ -9,10 +9,12 @@ public class PedestrianController : MonoBehaviour
     
     private NavMeshAgent agent;
     private Vector3 destination;
+    private Animator animator;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -24,11 +26,12 @@ public class PedestrianController : MonoBehaviour
     void Update()
     {
         if (!reachedDestination) CheckPathComplete();    
+        MovementAnimations();
     }
 
     void MovementAnimations()
     {
-    //    animator.SetFloat("MoveMagnitude", agent.velocity.magnitude);
+        animator.SetFloat("MoveMagnitude", agent.velocity.magnitude);
     }
 
     void CheckPathComplete()
