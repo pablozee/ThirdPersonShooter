@@ -18,7 +18,6 @@ public class PedestrianController : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -34,9 +33,14 @@ public class PedestrianController : MonoBehaviour
         Roam();
     }
 
+    public void AssignAnimator()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
+
     void MovementAnimations()
     {
-        animator.SetFloat("MoveMagnitude", agent.velocity.magnitude);
+        if (animator) animator.SetFloat("MoveMagnitude", agent.velocity.magnitude);
     }
 
     void Roam()
