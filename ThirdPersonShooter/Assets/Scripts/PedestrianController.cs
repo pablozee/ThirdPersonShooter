@@ -8,11 +8,11 @@ public class PedestrianController : MonoBehaviour
     public bool reachedDestination;
 
     [SerializeField] private float walkPointRange;
+    [SerializeField] public Vector3 walkPoint;
     private NavMeshAgent agent;
     private Vector3 destination;
     private Animator animator;
     private bool walkPointSet;
-    private Vector3 walkPoint;
 
 
     private void Awake()
@@ -29,7 +29,7 @@ public class PedestrianController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!reachedDestination) CheckPathComplete();    
+        if (walkPointSet) CheckPathComplete();    
         MovementAnimations();
         Roam();
     }
@@ -79,7 +79,7 @@ public class PedestrianController : MonoBehaviour
                 if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
                     reachedDestination = true;
-                    walkPointSet = true;
+                    walkPointSet = false;
                 }
             }
         }

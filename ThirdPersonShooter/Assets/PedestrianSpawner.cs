@@ -9,6 +9,7 @@ public class PedestrianSpawner : MonoBehaviour
 
     void Start()
     {
+        Random.InitState((int)Time.realtimeSinceStartup);
         StartCoroutine(Spawn());
     }
 
@@ -21,7 +22,7 @@ public class PedestrianSpawner : MonoBehaviour
             Transform spawnWaypoint = transform.GetChild(Random.Range(0, transform.childCount));
             pedestrian.GetComponent<PedestrianWaypointNavigator>().currentWaypoint = spawnWaypoint.GetComponent<Waypoint>();
             pedestrian.transform.position = spawnWaypoint.position;
-
+            pedestrian.GetComponent<PedestrianController>().walkPoint = spawnWaypoint.position;
             yield return new WaitForEndOfFrame();
 
             pedestriansSpawned++;

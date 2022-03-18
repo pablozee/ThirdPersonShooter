@@ -1007,7 +1007,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reachedDestination: 0
-  walkPointRange: 100
+  walkPointRange: 30
+  walkPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &317121163
 MonoBehaviour:
   m_ObjectHideFlags: 0
