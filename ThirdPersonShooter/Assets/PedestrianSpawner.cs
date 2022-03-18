@@ -39,16 +39,18 @@ public class PedestrianSpawner : MonoBehaviour
             if (NavMesh.SamplePosition(spawnPosition, out hit, 5.0f, finalMask))
             {
                 GameObject pedestrian = Instantiate(pedestrianPrefab);
-                Transform spawnWaypoint = transform.GetChild(Random.Range(0, transform.childCount));
-                pedestrian.GetComponent<PedestrianWaypointNavigator>().currentWaypoint = spawnWaypoint.GetComponent<Waypoint>();
+                //       Transform spawnWaypoint = transform.GetChild(Random.Range(0, transform.childCount));
+                //       pedestrian.GetComponent<PedestrianWaypointNavigator>().currentWaypoint = spawnWaypoint.GetComponent<Waypoint>();
+                NavMeshAgent pedestriantAgent = pedestrian.GetComponent<NavMeshAgent>();
+                pedestriantAgent.Warp(spawnPosition);
                 pedestrian.transform.position = spawnPosition;
-                pedestrian.GetComponent<PedestrianController>().walkPoint = spawnWaypoint.position;
-                pedestrian.GetComponent<NavMeshAgent>().speed = Random.Range(1f, 3f);
+                pedestrian.GetComponent<PedestrianController>().walkPoint = spawnPosition;
+                pedestriantAgent.speed = Random.Range(1f, 3f);
 
 
                 pedestriansSpawned++;
             }
-            yield return new WaitForEndOfFrame();
         }
+        yield return new WaitForEndOfFrame();
     }
 }

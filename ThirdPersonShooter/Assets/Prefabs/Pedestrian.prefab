@@ -912,7 +912,6 @@ GameObject:
   - component: {fileID: 2702773017255328102}
   - component: {fileID: 4685869119890585256}
   - component: {fileID: 8088455111855340777}
-  - component: {fileID: 317121163}
   - component: {fileID: 2129965105324287437}
   m_Layer: 0
   m_Name: Pedestrian
@@ -992,7 +991,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.85
   m_BaseOffset: 0
-  m_WalkableMask: 72
+  m_WalkableMask: 104
   m_ObstacleAvoidanceType: 4
 --- !u!114 &8088455111855340777
 MonoBehaviour:
@@ -1009,19 +1008,6 @@ MonoBehaviour:
   reachedDestination: 0
   walkPointRange: 30
   walkPoint: {x: 0, y: 0, z: 0}
---- !u!114 &317121163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153506}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de91e88d15534743bdb2d03b7a8ca37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentWaypoint: {fileID: 0}
 --- !u!136 &2129965105324287437
 CapsuleCollider:
   m_ObjectHideFlags: 0
