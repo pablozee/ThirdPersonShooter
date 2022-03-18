@@ -12,6 +12,8 @@ public class PedestrianSpawner : MonoBehaviour
     [SerializeField] private GameObject topLeft;
     [SerializeField] private GameObject bottomRight;
     [SerializeField] private GameObject bottomLeft;
+    [SerializeField] private List<GameObject> maleMeshes;
+    [SerializeField] private List<GameObject> femaleMeshes;
 
     void Start()
     {
@@ -44,14 +46,14 @@ public class PedestrianSpawner : MonoBehaviour
                 if (genderProb < 0.5)
                 {
                     pedestrian = Instantiate(malePrefab);
-                    int meshCount = malePrefab.transform.childCount - 1;
-                    pedestrian.transform.GetChild(Random.Range(0, meshCount)).gameObject.SetActive(true);
+                    int randomMeshIndex = Random.Range(0, maleMeshes.Count);
+                    Instantiate(maleMeshes[randomMeshIndex], pedestrian.transform);
                 }
                 else
                 {
                     pedestrian = Instantiate(femalePrefab);
-                    int meshCount = femalePrefab.transform.childCount - 1;
-                    pedestrian.transform.GetChild(Random.Range(0, meshCount)).gameObject.SetActive(true);
+                    int randomMeshIndex = Random.Range(0, femaleMeshes.Count);
+                    Instantiate(maleMeshes[randomMeshIndex], pedestrian.transform);
                 }
                 //       Transform spawnWaypoint = transform.GetChild(Random.Range(0, transform.childCount));
                 //       pedestrian.GetComponent<PedestrianWaypointNavigator>().currentWaypoint = spawnWaypoint.GetComponent<Waypoint>();
