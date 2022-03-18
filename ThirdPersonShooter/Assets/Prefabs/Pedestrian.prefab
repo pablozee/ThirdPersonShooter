@@ -1007,6 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reachedDestination: 0
+  walkPointRange: 100
 --- !u!114 &317121163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,7 +1015,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153506}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7de91e88d15534743bdb2d03b7a8ca37, type: 3}
   m_Name: 
