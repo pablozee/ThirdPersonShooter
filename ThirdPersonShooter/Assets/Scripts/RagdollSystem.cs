@@ -69,7 +69,10 @@ public class RagdollSystem : MonoBehaviour
                 agent.enabled = false;
                 SetRagdollPart(false, true);
                 foreach (MuscleComponent comp in muscleComponents)
-                    comp.rigidbody.AddForce(hitVelocity * 0.1f, ForceMode.Impulse);
+                {
+                    comp.rigidbody.AddForce(hitVelocity * 0.05f, ForceMode.Impulse);
+                    comp.rigidbody.AddForce(comp.transform.up * 3f, ForceMode.Impulse);
+                }
                 if (isRagdoll) animState = AnimationState.WaitForStable;
                 break;
             case AnimationState.WaitForStable:
