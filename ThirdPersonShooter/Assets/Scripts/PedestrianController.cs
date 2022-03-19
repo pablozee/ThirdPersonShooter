@@ -84,7 +84,7 @@ public class PedestrianController : MonoBehaviour
 
         if (!agent.pathPending)
         {
-            if (agent.remainingDistance <= agent.stoppingDistance)
+            if (agent.isActiveAndEnabled && agent.remainingDistance <= agent.stoppingDistance)
             {
                 if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
@@ -98,7 +98,7 @@ public class PedestrianController : MonoBehaviour
     public void SetDestination(Vector3 destination)
     {
         if (!agentActive || agent.enabled == false) return;
-        agent.SetDestination(destination);
+        if (agent.isActiveAndEnabled) agent.SetDestination(destination);
         this.destination = destination;
         reachedDestination = false;
     }

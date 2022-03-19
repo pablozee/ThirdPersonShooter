@@ -33,6 +33,7 @@ public class DisableOutOfView : MonoBehaviour
                 {
                     agent.enabled = true;
                     controller.agentActive = true;
+                    controller.enabled = true;
                 }
             }
         }
@@ -40,12 +41,14 @@ public class DisableOutOfView : MonoBehaviour
         {
             agent.enabled = false;
             controller.agentActive = false;
+            controller.enabled = false;
         }
 
         if (Vector3.Distance(transform.position, player.transform.position) < 30)
         {
             agent.enabled = true;
             controller.agentActive = true;
+            controller.enabled = true;
         }
     }
 }
