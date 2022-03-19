@@ -69,7 +69,7 @@ public class RagdollSystem : MonoBehaviour
                 agent.enabled = false;
                 SetRagdollPart(false, true);
                 foreach (MuscleComponent comp in muscleComponents)
-                    comp.rigidbody.AddForce(-hitVelocity * 0.001f, ForceMode.Impulse);
+                    comp.rigidbody.AddForce(hitVelocity * 0.1f, ForceMode.Impulse);
                 if (isRagdoll) animState = AnimationState.WaitForStable;
                 break;
             case AnimationState.WaitForStable:
@@ -97,7 +97,7 @@ public class RagdollSystem : MonoBehaviour
             if (comp.transform == transform)
             {
                 comp.collider.isTrigger = !isActive;
-                comp.rigidbody.isKinematic = !isActive;
+                comp.rigidbody.isKinematic = isActive;
                 continue;
             }
 
