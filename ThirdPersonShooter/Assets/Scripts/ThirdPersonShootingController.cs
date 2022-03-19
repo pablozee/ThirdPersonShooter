@@ -87,12 +87,7 @@ public class ThirdPersonShootingController : MonoBehaviour
 
         if (hitTransform != null)
         {
-            Enemy enemy = hitTransform.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                Debug.Log("Hit Enemy");
-                enemy.TakeDamage(10);
-            }
+            
         }
         starterAssetInputs.shoot = false;
     }

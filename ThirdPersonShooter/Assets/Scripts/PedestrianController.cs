@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class PedestrianController : MonoBehaviour
 {
     public bool reachedDestination;
+    public bool agentActive;
 
     [SerializeField] private float walkPointRange;
     [SerializeField] public Vector3 walkPoint;
@@ -19,15 +20,16 @@ public class PedestrianController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (!agentActive || agent.enabled == false) return;
+
         if (walkPointSet) CheckPathComplete();    
         MovementAnimations();
         Roam();
@@ -45,6 +47,8 @@ public class PedestrianController : MonoBehaviour
 
     void Roam()
     {
+        if (!agentActive || agent.enabled == false) return;
+
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet) agent.SetDestination(walkPoint);
@@ -76,6 +80,8 @@ public class PedestrianController : MonoBehaviour
 
     void CheckPathComplete()
     {
+        if (!agentActive || agent.enabled == false) return;
+
         if (!agent.pathPending)
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
@@ -91,6 +97,7 @@ public class PedestrianController : MonoBehaviour
 
     public void SetDestination(Vector3 destination)
     {
+        if (!agentActive || agent.enabled == false) return;
         agent.SetDestination(destination);
         this.destination = destination;
         reachedDestination = false;

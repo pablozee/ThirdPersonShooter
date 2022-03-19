@@ -64,7 +64,10 @@ public class PedestrianSpawner : MonoBehaviour
                 pedestrianController.AssignAnimator();
                 pedestrianController.walkPoint = spawnPosition;
                 pedestrianAgent.speed = Random.Range(1f, 3f);
-               
+
+                RagdollSystem ragdollSystem = pedestrian.GetComponent<RagdollSystem>();
+                ragdollSystem.AssignAnimator();
+
                 pedestriansSpawned++;
             }
         }
