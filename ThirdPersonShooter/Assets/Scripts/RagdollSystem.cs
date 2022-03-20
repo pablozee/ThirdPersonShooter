@@ -121,7 +121,7 @@ public class RagdollSystem : MonoBehaviour
                 {
                     if (comp.bodyPart == hitPart && isDamaged && appliedForce == false)
                     {
-                        comp.rigidbody.AddForce(hitForce, ForceMode.Impulse);
+                        comp.rigidbody.AddForce(hitForce, ForceMode.VelocityChange);
                         Debug.Log("Applying force: " + hitForce);
                     }
                 }
@@ -129,6 +129,7 @@ public class RagdollSystem : MonoBehaviour
                 hips.parent = null;
                 transform.position = hips.position;
                 appliedForce = true;
+                Debug.Log("Hit Reaction");
                 animState = AnimationState.DamageRecover;
                 break;
             case AnimationState.DamageRecover:
@@ -204,8 +205,9 @@ public class RagdollSystem : MonoBehaviour
         hitPart = hitBodyPart;
         hitForce = force;
         isDamaged = true;
-        animState = AnimationState.HitReaction;
         appliedForce = false;
+        timer = getUpDelay;
+        animState = AnimationState.HitReaction;
     }
 
     private void OnCollisionEnter(Collision collision)
