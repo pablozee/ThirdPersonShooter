@@ -95,9 +95,7 @@ public class ThirdPersonShootingController : MonoBehaviour
             hitTransform.TryGetComponent<Muscle>(out muscle);
             if (muscle)
             {
-                Debug.Log(rayDirection);
-                muscle.GetDamage(rayDirection * hitForce);
-                Debug.Log("Hit muscle, dealing damage");
+                muscle.GetDamage(rayDirection.normalized * hitForce);
             }
         }
         starterAssetInputs.shoot = false;

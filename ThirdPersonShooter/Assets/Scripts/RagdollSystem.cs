@@ -76,6 +76,7 @@ public class RagdollSystem : MonoBehaviour
     private bool resetNavMeshPosition;
     private float timer = 2f;
     private float blendValue;
+    private bool appliedForce;
 
     void Start()
     {
@@ -83,7 +84,7 @@ public class RagdollSystem : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
             muscleComponents.Add(new MuscleComponent(rb.transform));
-        ToggleAnimationState(true, true);
+        ToggleAnimationState(true, true, false);
     }
 
     void Update()
@@ -111,19 +112,23 @@ public class RagdollSystem : MonoBehaviour
                     agent.speed = 0;
                     timer = getUpDelay;
                     isRagdoll = true;
+                    appliedForce = false;
                 }
                 break;
             case AnimationState.HitReaction:
-                ToggleAnimationState(false, false);
-                Debug.Log("In hit reaction state");
+                ToggleAnimationState(false, false, false);
                 foreach (MuscleComponent comp in muscleComponents)
                 {
-                    if (comp.bodyPart == hitPart)
+                    if (comp.bodyPart == hitPart && isDamaged && appliedForce == false)
                     {
-                        Debug.Log("Applying force to muscle component");
-                        comp.rigidbody.AddForce(hitForce, ForceMode.VelocityChange);
+                        comp.rigidbody.AddForce(hitForce, ForceMode.Impulse);
+                        Debug.Log("Applying force: " + hitForce);
                     }
                 }
+                hitForce = Vector3.zero;
+                hips.parent = null;
+                transform.position = hips.position;
+                appliedForce = true;
                 animState = AnimationState.DamageRecover;
                 break;
             case AnimationState.DamageRecover:
@@ -133,8 +138,8 @@ public class RagdollSystem : MonoBehaviour
                 controller.agentActive = false;
                 controller.enabled = false;
                 agent.enabled = false;
-                ToggleAnimationState(false, true);
-                if (isRagdoll)
+                ToggleAnimationState(false, true, true);
+                if (isRagdoll && !isDamaged)
                 {
                     foreach (MuscleComponent comp in muscleComponents)
                     {
@@ -144,6 +149,7 @@ public class RagdollSystem : MonoBehaviour
                     hitVelocity = Vector3.zero;
                     hips.parent = null;
                     transform.position = hips.position;
+                    appliedForce = true;
                 }
                 if (hipsRB.velocity.magnitude < 5f)
                     timer -= Time.deltaTime;  
@@ -162,7 +168,7 @@ public class RagdollSystem : MonoBehaviour
                     component.storedPosition = component.transform.localPosition;
                     component.storedRotation = component.transform.localRotation;
                 }
-                ToggleAnimationState(true, true);    
+                ToggleAnimationState(true, true, false);    
                 break;
             case AnimationState.RagdollToAnim:
                 break;
@@ -199,7 +205,7 @@ public class RagdollSystem : MonoBehaviour
         hitForce = force;
         isDamaged = true;
         animState = AnimationState.HitReaction;
-        Debug.Log(hitPart);
+        appliedForce = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -220,7 +226,7 @@ public class RagdollSystem : MonoBehaviour
         }
     }
 
-    void ToggleAnimationState(bool isActive, bool gravity)
+    void ToggleAnimationState(bool isActive, bool gravity, bool baseColliderIsTrigger)
     {
         if (anim) anim.enabled = isActive;
         foreach (MuscleComponent comp in muscleComponents)
@@ -229,7 +235,7 @@ public class RagdollSystem : MonoBehaviour
 
             if (comp.transform == transform)
             {
-                comp.collider.isTrigger = !isActive;
+                comp.collider.isTrigger = baseColliderIsTrigger;
                 comp.rigidbody.isKinematic = isActive;
                 continue;
             }

@@ -21,9 +21,6 @@ public class Muscle : MonoBehaviour
 
     public void GetDamage(Vector3 force)
     {
-        Debug.Log("Force: " + force);
-        Debug.Log("Ragdoll: " + ragdoll);
         ragdoll.Damage(bodyPart, force);
-        Debug.Log("In muscle, dealing ragdoll damage");
     }
 }
