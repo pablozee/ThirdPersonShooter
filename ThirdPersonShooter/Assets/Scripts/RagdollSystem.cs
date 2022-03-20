@@ -151,6 +151,15 @@ public class RagdollSystem : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform != transform.parent)
+        {
+            if (other.tag == "Car")
+                hitVelocity = other.attachedRigidbody.velocity;
+        }
+    }
+
     void ToggleAnimationState(bool isActive, bool gravity)
     {
         if (anim) anim.enabled = isActive;
