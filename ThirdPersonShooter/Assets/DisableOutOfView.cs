@@ -29,17 +29,17 @@ public class DisableOutOfView : MonoBehaviour
     {
         Vector3 viewportPosition = cam.WorldToViewportPoint(transform.position);
 
-        if (viewportPosition.x > 0 && viewportPosition.x < 1)
+        if (viewportPosition.x > -1 && viewportPosition.x < 1)
         {
-            if (viewportPosition.y > 0 && viewportPosition.y < 1)
+            if (viewportPosition.y > -1 && viewportPosition.y < 1)
             {
                 if (viewportPosition.z > 0)
                 {
                     agent.enabled = true;
                     controller.agentActive = true;
                     controller.enabled = true;
-                    col.enabled = true;
-                    childCol.SetActive(true);
+               //     col.enabled = true;
+                 //   childCol.SetActive(true);
                 }
             }
         }
@@ -48,8 +48,8 @@ public class DisableOutOfView : MonoBehaviour
             agent.enabled = false;
             controller.agentActive = false;
             controller.enabled = false;
-            col.enabled = false;
-            childCol.SetActive(false);
+       //     col.enabled = false;
+       //     childCol.SetActive(false);
 
         }
 
@@ -58,8 +58,8 @@ public class DisableOutOfView : MonoBehaviour
             agent.enabled = true;
             controller.agentActive = true;
             controller.enabled = true;
-            col.enabled = true;
-            childCol.SetActive(true);
+         //   col.enabled = true;
+           // childCol.SetActive(true);
         }
     }
 }
