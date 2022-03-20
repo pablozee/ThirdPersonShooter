@@ -10,6 +10,8 @@ public class DisableOutOfView : MonoBehaviour
     private Camera cam;
     private NavMeshAgent agent;
     private PedestrianController controller;
+    private Collider col;
+    private GameObject childCol;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +20,8 @@ public class DisableOutOfView : MonoBehaviour
         cam = Camera.main;
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponent<PedestrianController>();
+        col = GetComponent<Collider>();
+        childCol = transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -34,6 +38,8 @@ public class DisableOutOfView : MonoBehaviour
                     agent.enabled = true;
                     controller.agentActive = true;
                     controller.enabled = true;
+                    col.enabled = true;
+                    childCol.SetActive(true);
                 }
             }
         }
@@ -42,6 +48,9 @@ public class DisableOutOfView : MonoBehaviour
             agent.enabled = false;
             controller.agentActive = false;
             controller.enabled = false;
+            col.enabled = false;
+            childCol.SetActive(false);
+
         }
 
         if (Vector3.Distance(transform.position, player.transform.position) < 30)
@@ -49,6 +58,8 @@ public class DisableOutOfView : MonoBehaviour
             agent.enabled = true;
             controller.agentActive = true;
             controller.enabled = true;
+            col.enabled = true;
+            childCol.SetActive(true);
         }
     }
 }

@@ -7,14 +7,34 @@ using UnityEngine.AI;
 public enum AnimationState
 {
     Animated,
+    HitReaction,
+    DamageRecover,
     RagdollMode,
     WaitForStable,
     RagdollToAnim
 }
 
 [System.Serializable]
+public enum BodyPart
+{
+    Spine, 
+    Chest, 
+    LeftHip,
+    LeftKnee, 
+    RightHip, 
+    RightKnee, 
+    Head, 
+    LeftArm, 
+    LeftElbow, 
+    RightArm, 
+    RightElbow, 
+    None
+}
+
+[System.Serializable]
 public class MuscleComponent
 {
+    public BodyPart bodyPart = BodyPart.None;
     public Transform transform;
     public Quaternion storedRotation;
     public Vector3 storedPosition;
@@ -26,6 +46,11 @@ public class MuscleComponent
         transform = t;
         rigidbody = t.GetComponent<Rigidbody>();
         collider = t.GetComponent<Collider>();
+        Muscle muscle;
+        t.TryGetComponent<Muscle>(out muscle);
+        if (muscle)
+            bodyPart = muscle.bodyPart;
+
     }
 }
 public class RagdollSystem : MonoBehaviour
@@ -35,12 +60,14 @@ public class RagdollSystem : MonoBehaviour
     [SerializeField] private float blendAmount = 1f;
     [SerializeField] private float getUpDelay = 2f;
     [SerializeField] private List<MuscleComponent> muscleComponents = new List<MuscleComponent>();
-    [SerializeField] private bool isRagdoll;
+    [SerializeField] private bool isRagdoll, isDamaged;
     [SerializeField] private string getUpFromFrontAnim;
     [SerializeField] private string getUpFromBackAnim;
 
     private Animator anim;
     private Vector3 hitVelocity;
+    private Vector3 hitForce;
+    private BodyPart hitPart;
     private PedestrianController controller;
     private NavMeshAgent agent;
     private Transform hips;
@@ -86,29 +113,48 @@ public class RagdollSystem : MonoBehaviour
                     isRagdoll = true;
                 }
                 break;
+            case AnimationState.HitReaction:
+                ToggleAnimationState(false, false);
+                foreach (MuscleComponent comp in muscleComponents)
+                {
+                    if (comp.bodyPart == hitPart)
+                    {
+                        comp.rigidbody.AddForce(hitForce, ForceMode.VelocityChange);
+                    }
+                }
+                animState = AnimationState.DamageRecover;
+                break;
+            case AnimationState.DamageRecover:
+                animState = AnimationState.RagdollMode;
+                break;
             case AnimationState.RagdollMode:
                 controller.agentActive = false;
                 controller.enabled = false;
                 agent.enabled = false;
                 ToggleAnimationState(false, true);
-                foreach (MuscleComponent comp in muscleComponents)
+                if (isRagdoll)
                 {
-                    comp.rigidbody.AddForce(hitVelocity * 0.005f, ForceMode.Impulse);
-                    comp.rigidbody.AddForce(comp.transform.up * 3f, ForceMode.Impulse);
+                    foreach (MuscleComponent comp in muscleComponents)
+                    {
+                        comp.rigidbody.AddForce(hitVelocity * 0.005f, ForceMode.Impulse);
+                        comp.rigidbody.AddForce(comp.transform.up * 3f, ForceMode.Impulse);
+                    }
+                    hitVelocity = Vector3.zero;
+                    hips.parent = null;
+                    transform.position = hips.position;
                 }
-                hitVelocity = Vector3.zero;
-                hips.parent = null;
-                transform.position = hips.position;
                 if (hipsRB.velocity.magnitude < 5f)
                     timer -= Time.deltaTime;  
-                if (isRagdoll && timer <= 0.0f) 
-                    animState = AnimationState.WaitForStable;
+                if (isRagdoll || isDamaged)
+                    if (timer <= 0.0f) 
+                        animState = AnimationState.WaitForStable;
                 break;
             case AnimationState.WaitForStable:
                 blendValue = blendAmount;
                 hips.parent = hipsParent;
                 animState = AnimationState.RagdollToAnim;
-                GetUp();
+                if (isRagdoll)
+                    GetUp();
                 foreach (MuscleComponent component in muscleComponents)
                 {
                     component.storedPosition = component.transform.localPosition;
@@ -138,8 +184,20 @@ public class RagdollSystem : MonoBehaviour
                 animState = AnimationState.Animated;
                 resetNavMeshPosition = true;
                 isRagdoll = false;
+                isDamaged = false;
+                hitForce = Vector3.zero;
+                hitPart = BodyPart.None;
             }
         }
+    }
+
+    public void Damage(BodyPart hitBodyPart, Vector3 force)
+    {
+        hitPart = hitBodyPart;
+        hitForce = force;
+        isDamaged = true;
+        animState = AnimationState.HitReaction;
+        Debug.Log(hitPart);
     }
 
     private void OnCollisionEnter(Collision collision)
