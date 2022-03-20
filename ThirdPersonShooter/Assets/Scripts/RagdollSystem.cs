@@ -161,8 +161,7 @@ public class RagdollSystem : MonoBehaviour
             case AnimationState.WaitForStable:
                 blendValue = blendAmount;
                 hips.parent = hipsParent;
-                animState = AnimationState.RagdollToAnim;
-                if (isRagdoll)
+                if (isRagdoll || isDamaged)
                     GetUp();
                 foreach (MuscleComponent component in muscleComponents)
                 {
@@ -170,6 +169,7 @@ public class RagdollSystem : MonoBehaviour
                     component.storedRotation = component.transform.localRotation;
                 }
                 ToggleAnimationState(true, true, false);    
+                animState = AnimationState.RagdollToAnim;
                 break;
             case AnimationState.RagdollToAnim:
                 break;
