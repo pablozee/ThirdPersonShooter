@@ -17,11 +17,14 @@ public class ThirdPersonShootingController : MonoBehaviour
     [SerializeField] private float aimAnimationTransitionSpeed;
     [SerializeField] private AudioSource shootAudioSource;
     [SerializeField] private Rig rig;
+    [SerializeField] private float hitForce;
+    [SerializeField] private LayerMask shootableLayerMask;
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetInputs;
     private Animator animator;
     private Transform hitTransform;
+    private Vector3 rayDirection;
 
     private void Awake()
     {
@@ -43,6 +46,7 @@ public class ThirdPersonShootingController : MonoBehaviour
 
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        rayDirection = ray.direction;
         hitTransform = null;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
@@ -87,7 +91,14 @@ public class ThirdPersonShootingController : MonoBehaviour
 
         if (hitTransform != null)
         {
-            
+            Muscle muscle;
+            hitTransform.TryGetComponent<Muscle>(out muscle);
+            if (muscle)
+            {
+                Debug.Log(rayDirection);
+                muscle.GetDamage(rayDirection * hitForce);
+                Debug.Log("Hit muscle, dealing damage");
+            }
         }
         starterAssetInputs.shoot = false;
     }

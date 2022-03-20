@@ -115,10 +115,12 @@ public class RagdollSystem : MonoBehaviour
                 break;
             case AnimationState.HitReaction:
                 ToggleAnimationState(false, false);
+                Debug.Log("In hit reaction state");
                 foreach (MuscleComponent comp in muscleComponents)
                 {
                     if (comp.bodyPart == hitPart)
                     {
+                        Debug.Log("Applying force to muscle component");
                         comp.rigidbody.AddForce(hitForce, ForceMode.VelocityChange);
                     }
                 }
