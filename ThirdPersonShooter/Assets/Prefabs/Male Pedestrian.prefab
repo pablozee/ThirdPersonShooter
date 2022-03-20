@@ -118,8 +118,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animState: 0
   minHitSpeed: 2
+  blendAmount: 3
+  getUpDelay: 2
   muscleComponents: []
   isRagdoll: 0
+  getUpFromFrontAnim: GettingUp.FromFront
+  getUpFromBackAnim: GettingUp.FromBack
 --- !u!114 &-3821528890244165171
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,6 +16,8 @@ public enum AnimationState
 public class MuscleComponent
 {
     public Transform transform;
+    public Quaternion storedRotation;
+    public Vector3 storedPosition;
     public Rigidbody rigidbody;
     public Collider collider;
     
@@ -30,13 +32,23 @@ public class RagdollSystem : MonoBehaviour
 {
     [SerializeField] private AnimationState animState = AnimationState.Animated;
     [SerializeField] private float minHitSpeed = 15f;
+    [SerializeField] private float blendAmount = 1f;
+    [SerializeField] private float getUpDelay = 2f;
     [SerializeField] private List<MuscleComponent> muscleComponents = new List<MuscleComponent>();
     [SerializeField] private bool isRagdoll;
+    [SerializeField] private string getUpFromFrontAnim;
+    [SerializeField] private string getUpFromBackAnim;
 
     private Animator anim;
     private Vector3 hitVelocity;
     private PedestrianController controller;
     private NavMeshAgent agent;
+    private Transform hips;
+    private Transform hipsParent;
+    private Rigidbody hipsRB;
+    private bool resetNavMeshPosition;
+    private float timer = 2f;
+    private float blendValue;
 
     void Start()
     {
@@ -44,7 +56,7 @@ public class RagdollSystem : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
             muscleComponents.Add(new MuscleComponent(rb.transform));
-        SetRagdollPart(true, true);
+        ToggleAnimationState(true, true);
     }
 
     void Update()
@@ -55,29 +67,78 @@ public class RagdollSystem : MonoBehaviour
                 controller.agentActive = true;
                 controller.enabled = true;
                 agent.enabled = true;
+                
+                if (resetNavMeshPosition)
+                {
+                    agent.Warp(transform.position);
+                    resetNavMeshPosition = false;
+                    agent.speed = Random.Range(1.0f, 3.0f);
+                }
+
                 if (hitVelocity.magnitude > minHitSpeed)
                 {
                     animState = AnimationState.RagdollMode;
                     controller.agentActive = false;
                     controller.enabled = false;
                     agent.enabled = false;
+                    agent.speed = 0;
+                    timer = getUpDelay;
+                    isRagdoll = true;
                 }
                 break;
             case AnimationState.RagdollMode:
                 controller.agentActive = false;
                 controller.enabled = false;
                 agent.enabled = false;
-                SetRagdollPart(false, true);
+                ToggleAnimationState(false, true);
                 foreach (MuscleComponent comp in muscleComponents)
                 {
-                    comp.rigidbody.AddForce(hitVelocity * 0.05f, ForceMode.Impulse);
+                    comp.rigidbody.AddForce(hitVelocity * 0.005f, ForceMode.Impulse);
                     comp.rigidbody.AddForce(comp.transform.up * 3f, ForceMode.Impulse);
                 }
-                if (isRagdoll) animState = AnimationState.WaitForStable;
+                hitVelocity = Vector3.zero;
+                hips.parent = null;
+                transform.position = hips.position;
+                if (hipsRB.velocity.magnitude < 5f)
+                    timer -= Time.deltaTime;  
+                if (isRagdoll && timer <= 0.0f) 
+                    animState = AnimationState.WaitForStable;
                 break;
             case AnimationState.WaitForStable:
+                blendValue = blendAmount;
+                hips.parent = hipsParent;
+                animState = AnimationState.RagdollToAnim;
+                GetUp();
+                foreach (MuscleComponent component in muscleComponents)
+                {
+                    component.storedPosition = component.transform.localPosition;
+                    component.storedRotation = component.transform.localRotation;
+                }
+                ToggleAnimationState(true, true);    
+                break;
+            case AnimationState.RagdollToAnim:
                 break;
 
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if(animState == AnimationState.RagdollToAnim)
+        {
+            blendValue -= Time.deltaTime;
+            foreach (MuscleComponent component in muscleComponents)
+            {
+                component.transform.localPosition = Vector3.Slerp(component.transform.localPosition, component.storedPosition, blendAmount);
+                component.transform.localRotation = Quaternion.Slerp(component.transform.localRotation, component.storedRotation, blendAmount);
+            }
+
+            if (blendValue <= 0.0f)
+            {
+                animState = AnimationState.Animated;
+                resetNavMeshPosition = true;
+                isRagdoll = false;
+            }
         }
     }
 
@@ -90,7 +151,7 @@ public class RagdollSystem : MonoBehaviour
         }
     }
 
-    void SetRagdollPart(bool isActive, bool gravity)
+    void ToggleAnimationState(bool isActive, bool gravity)
     {
         if (anim) anim.enabled = isActive;
         foreach (MuscleComponent comp in muscleComponents)
@@ -112,5 +173,44 @@ public class RagdollSystem : MonoBehaviour
     public void AssignAnimator()
     {
         anim = GetComponentInChildren<Animator>();
+        hips = anim.GetBoneTransform(HumanBodyBones.Hips);
+        hipsParent = hips.parent;
+        hipsRB = hips.GetComponent<Rigidbody>();
+    }
+
+    void GetUp()
+    {
+        transform.rotation = Quaternion.FromToRotation(transform.forward, RagdollDirection()) * transform.rotation;
+        hips.rotation = Quaternion.FromToRotation(RagdollDirection(), transform.forward) * hips.rotation;
+        string animationToPlay = CheckIfLieOnBack() ? getUpFromBackAnim : getUpFromFrontAnim;
+        anim.Play(animationToPlay, 0, 0);
+    }
+
+    Vector3 RagdollDirection()
+    {
+        Vector3 ragdollDirection = hips.position - anim.GetBoneTransform(HumanBodyBones.Head).position;
+        ragdollDirection.y = 0;
+        if (CheckIfLieOnBack())
+        {
+            return ragdollDirection.normalized;
+        }
+        else
+        {
+            return -ragdollDirection.normalized;
+        }
+
+    }
+
+    bool CheckIfLieOnBack()
+    {
+        Vector3 leftLeg = anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg).position;
+        Vector3 rightLeg = anim.GetBoneTransform(HumanBodyBones.RightUpperLeg).position;
+        leftLeg -= hips.position;
+        rightLeg -= hips.position;
+        leftLeg.y = 0f;
+        rightLeg.y = 0f;
+        Quaternion rotation = Quaternion.FromToRotation(leftLeg, Vector3.right);
+        Vector3 t = rotation * rightLeg;
+        return t.z < 0f;
     }
 }
